@@ -1,0 +1,10 @@
+# test-only packages: pin everything to minimize change
+pytest==6.2.1
+
+# actual dependencies: let things break if a package changes
+requests>=1.0.0
+thrift>=0.10.0
+asn1crypto>=1.3.0
+asysocks>=0.0.2
+pyasn1>=0.4.8
+pytimeparse>=1.1.8
