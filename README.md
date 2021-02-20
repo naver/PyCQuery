@@ -77,7 +77,7 @@ create_engine(
 ```
 
 ### Kerberos Authentication with HTTP Thrift
-- For One HiveServer2 Instance
+- For Single HiveServer2 Instance
 ```py
 from pycquery import hive
 from pycquery_krb.common import conf
@@ -91,8 +91,8 @@ params = {
     'auth': 'KERBEROS',
     'username': 'user1@EXAMPLE.COM',
     'keytab_file': 'keytab-file-for-username',
-    'krb_conf': conf.KerberosConf.from_osenv() # load krb5.conf from /etc/krb5.conf
-         # 'krb_conf': conf.KerberosConf.from_file('other-krb5-conf-file')
+    'krb_conf': conf.KerberosConf.from_osenv() # load krb5.conf from the path set by KRB5_CONFIG or /etc/krb5.conf
+     # 'krb_conf': conf.KerberosConf.from_file('other-krb5-conf-file') # load krb5.conf from your path
 }
 
 if __name__ == "__main__":
@@ -124,8 +124,8 @@ params = {
     'auth': 'KERBEROS',
     'username': 'user1@EXAMPLE.COM',
     'keytab_file': 'keytab-file-for-username',
-    'krb_conf': conf.KerberosConf.from_osenv() # load krb5.conf from /etc/krb5.conf
-         # 'krb_conf': conf.KerberosConf.from_file('other-krb5-conf-file')
+    'krb_conf': conf.KerberosConf.from_osenv() # load krb5.conf from the path set by KRB5_CONFIG or /etc/krb5.conf
+     # 'krb_conf': conf.KerberosConf.from_file('other-krb5-conf-file') # load krb5.conf from your path 
 }
 
 if __name__ == "__main__":
