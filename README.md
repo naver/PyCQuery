@@ -9,6 +9,9 @@ Other than [PyHive](https://github.com/dropbox/PyHive), it supports features bel
 - Python 3.6 or above
 - [HiveServer2](https://cwiki.apache.org/confluence/display/Hive/Setting+up+HiveServer2) instance for Hive 3.x
 
+## Install
+`pip3 install PyCQuery`
+
 ## Usage
 
 ### DB-API
