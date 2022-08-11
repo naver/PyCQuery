@@ -153,7 +153,7 @@ class KerberosCredential:
 			for keytab_entry in keytab.entries:
 				if realm == keytab_entry.principal.realm.to_string():
 					for keytab_principal in keytab_entry.principal.components:
-						if principal == keytab_principal.to_string():
+						if principal.split('/')[0] == keytab_principal.to_string():
 							enctype = None
 							if Enctype.AES256 == keytab_entry.enctype:
 								enctype = KerberosSecretType.AES256
