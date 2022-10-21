@@ -152,8 +152,8 @@ class Connection(object):
         /impala/_thrift_api.py#L152-L160
         """
         self._opened = False
+        self._kerberos_service_name = kerberos_service_name
         self.auth = auth
-        self.kerberos_service_name = kerberos_service_name
         self.username = username or getpass.getuser()
         self.password = password
         self.service_mode = service_mode
@@ -251,7 +251,7 @@ class Connection(object):
                         sasl_client = sasl.Client()
                         sasl_client.setAttr('host', self.host)
                         if sasl_auth == 'GSSAPI':
-                            sasl_client.setAttr('service', kerberos_service_name)
+                            sasl_client.setAttr('service', self.kerberos_service_name)
                         elif sasl_auth == 'PLAIN':
                             sasl_client.setAttr('username', username)
                             sasl_client.setAttr('password', password)
@@ -365,6 +365,10 @@ class Connection(object):
     @property
     def sessionHandle(self):
         return self._sessionHandle
+
+    @property
+    def kerberos_service_name(self):
+        return self._kerberos_service_name.replace('_HOST', self.host)
 
     def rollback(self):
         raise NotSupportedError("Hive does not have transactions")  # pragma: no cover
