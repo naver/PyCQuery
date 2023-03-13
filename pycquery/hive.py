@@ -146,6 +146,7 @@ class Connection(object):
         :param zookeeper_name_space: Use with service_mode='http' and is_zookeeper='true' only
         :param keytab_file: Use with service_mode='http' and auth='KERBEROS' only
         :param krb_conf: pycquery_krb.common.conf.KerberosConf instance. Use with service_mode='http' and auth='KERBEROS' only
+        :param timeout: http socket timeout (unit: ms)
 
         The way to support LDAP and GSSAPI is originated from cloudera/Impyla:
         https://github.com/cloudera/impyla/blob/255b07ed973d47a3395214ed92d35ec0615ebf62
