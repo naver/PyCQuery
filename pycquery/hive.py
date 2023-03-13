@@ -128,7 +128,7 @@ class Connection(object):
                  configuration=None, kerberos_service_name=None, password=None,
                  thrift_transport=None, service_mode='binary', http_path=None,
                  is_zookeeper=False, zookeeper_name_space='hiveserver2', keytab_file=None,
-                 krb_conf=None):
+                 krb_conf=None, timeout=None):
         """Connect to HiveServer2
 
         :param host: What host HiveServer2 runs on
@@ -279,6 +279,8 @@ class Connection(object):
                     self._transport = thrift.transport.THttpClient.THttpClient(
                         "http://{}:{}/{}".format(self.host, self.port, http_path)
                     )
+                    if timeout is not None:
+                        self._transport.setTimeout(timeout)
                     if auth == 'KERBEROS':
                         self.set_auth_setting()
                     else:
