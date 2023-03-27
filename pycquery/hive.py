@@ -128,7 +128,7 @@ class Connection(object):
                  configuration=None, kerberos_service_name=None, password=None,
                  thrift_transport=None, service_mode='binary', http_path=None,
                  is_zookeeper=False, zookeeper_name_space='hiveserver2', keytab_file=None,
-                 krb_conf=None):
+                 krb_conf=None, timeout=None):
         """Connect to HiveServer2
 
         :param host: What host HiveServer2 runs on
@@ -146,6 +146,7 @@ class Connection(object):
         :param zookeeper_name_space: Use with service_mode='http' and is_zookeeper='true' only
         :param keytab_file: Use with service_mode='http' and auth='KERBEROS' only
         :param krb_conf: pycquery_krb.common.conf.KerberosConf instance. Use with service_mode='http' and auth='KERBEROS' only
+        :param timeout: http socket timeout (unit: ms)
 
         The way to support LDAP and GSSAPI is originated from cloudera/Impyla:
         https://github.com/cloudera/impyla/blob/255b07ed973d47a3395214ed92d35ec0615ebf62
@@ -279,6 +280,8 @@ class Connection(object):
                     self._transport = thrift.transport.THttpClient.THttpClient(
                         "http://{}:{}/{}".format(self.host, self.port, http_path)
                     )
+                    if timeout is not None:
+                        self._transport.setTimeout(timeout)
                     if auth == 'KERBEROS':
                         self.set_auth_setting()
                     else:
