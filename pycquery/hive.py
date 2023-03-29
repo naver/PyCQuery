@@ -57,6 +57,7 @@ paramstyle = 'pyformat'  # Python extended format codes, e.g. ...WHERE name=%(na
 _logger = logging.getLogger(__name__)
 
 _TIMESTAMP_PATTERN = re.compile(r'(\d+-\d+-\d+ \d+:\d+:\d+(\.\d{,6})?)')
+_KV_PATTERN = re.compile('([^=;]*)=([^;]*);?')
 
 _ENV_KRB5CCNAME = 'KRB5CCNAME'
 _ENV_KRB5CONFIG = 'KRB5_CONFIG'
@@ -443,7 +444,7 @@ class Connection(object):
 
         zk.start()
         children = zk.get_children('/' + zookeeper_name_space)
-        nodes = self.get_hiveserver2_info(children)
+        nodes = self.get_hiveserver2_info(zk, zookeeper_name_space, children)
         zk.stop()
         zk.close()
 
@@ -454,18 +455,28 @@ class Connection(object):
         return nodes
 
     @staticmethod
-    def get_hiveserver2_info(children):
-        """Change node information stored in zookeeper to dictionary type list"""
+    def get_hiveserver2_info(zk, zookeeper_name_space, children):
         result = list()
         for child in children:
-            node = dict()
-            for info in child.split(';'):
-                (key, value) = info.split('=')
-                if key == 'serverUri':
-                    node['host'], node['port'] = value.split(':')
-                else:
-                    node[key] = value
-            result.append(node)
+            data_node = zk.get('/' + zookeeper_name_space + '/' + child)
+            data = str(data_node[0], 'utf-8')
+            matcher = _KV_PATTERN.findall(data)
+            if data != '' and len(matcher) == 0:
+                split_data = data.split(":")
+                if len(split_data) == 2:
+                    result.append(':'.join([split_data[0], split_data[1]]))
+            else:
+                params = {}
+                for m in matcher:
+                    if len(m) == 2:
+                        key = m[0]
+                        value = m[1]
+                        if key == 'hive.server2.thrift.bind.host':
+                            params['host'] = value
+                        elif key == 'hive.server2.thrift.port' or key == 'hive.server2.thrift.http.port':
+                            params['port'] = value
+                if 'host' in params and 'port' in params:
+                    result.append(':'.join([params['host'], params['port']]))
         return result
 
 
