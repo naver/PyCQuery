@@ -464,7 +464,7 @@ class Connection(object):
             if data != '' and len(matcher) == 0:
                 split_data = data.split(":")
                 if len(split_data) == 2:
-                    result.append(':'.join([split_data[0], split_data[1]]))
+                    result.append({'host': split_data[0], 'port': split_data[1]})
             else:
                 params = {}
                 for m in matcher:
@@ -476,7 +476,7 @@ class Connection(object):
                         elif key == 'hive.server2.thrift.port' or key == 'hive.server2.thrift.http.port':
                             params['port'] = value
                 if 'host' in params and 'port' in params:
-                    result.append(':'.join([params['host'], params['port']]))
+                    result.append({'host': params['host'], 'port': params['port']})
         return result
 
 

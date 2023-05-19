@@ -11,3 +11,6 @@ asn1crypto>=1.4.0
 asysocks>=0.1.0
 pyasn1>=0.4.8
 pytimeparse>=1.1.8
+sasl>=0.3.1
+thrift_sasl>=0.4.3
+pure-sasl>=0.6.2
